@@ -1,0 +1,21 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es5",
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "plugins": [{ "name": "ts-vue-plugin" }],
+    "watch": true,
+    "types": [
+      "node",
+      "webpack-env"
+    ]
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

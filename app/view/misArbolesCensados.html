@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+
+        if (localStorage.getItem("access_token") == null) {
+
+            window.location.replace("/");
+        }
+
+    </script>
+    <!-- Title -->
+    <title>Arbolado 2019</title>
+    <!-- Main Icon -->
+    <link rel="icon" type="text/css" href="../resource/image/main-icon.png">
+    <!-- Apple Icon -->
+    <link rel="apple-touch-icon" type="text/css" href="../resource/image/main-icon.png">
+    <!-- Meta information and responsive scale -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+</head>
+<body id="bodyMisArbolesCensados">
+
+<!-- Loading -->
+<div class="se-pre-con"></div>
+
+
+<div id="mainMisArbolesCensados">
+
+    <main-header></main-header>
+
+    <div class="col-12 text-center">
+        <h5 class="text-success main-font pb-2 pt-2">Elije un área para ver las manzanas censadas</h5>
+
+        <!-- Buttons start here -->
+        <div class="list-group" v-for="(item, index) in this.my_area_array_names">
+            <a href="#" @click="selectedArea(index)" class="list-group-item list-group-item-action flex-column align-items-start mb-2 text-dark">
+                <div class="d-flex w-100 justify-content-center">
+                    <h6 class="mb-1 main-font">
+                        <i class="fas fa-map pr-1"></i>{{my_area_array_names[index]}}</h6>
+                </div>
+            </a>
+
+
+        </div>
+
+        <!-- Navigation buttons -->
+        <div class="row ml-1 mr-1">
+            <!-- Back -->
+            <div class="col-6 text-left mt-4 pl-0">
+                <h4>
+                    <a href="home.html" class="align-items-start">
+                        <i class="fas fa-arrow-left" style="width: 50%;"></i>
+                    </a>
+                </h4>
+            </div>
+        </div>
+        <!-- End of nav buttons -->
+    </div>
+</div>
+</body>
+</html>

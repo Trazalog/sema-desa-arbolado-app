@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+
+        if (localStorage.getItem("access_token") == null) {
+
+            window.location.replace("/");
+        }
+
+    </script>
+    <!-- Title -->
+    <title>Arbolado 2019</title>
+    <!-- Main Icon -->
+    <link rel="icon" type="text/css" href="../resource/image/main-icon.png">
+    <!-- Apple Icon -->
+    <link rel="apple-touch-icon" type="text/css" href="../resource/image/main-icon.png">
+    <!-- Meta information and responsive scale -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+</head>
+<body id="bodyFormDynamic">
+
+<!-- Loading -->
+<div class="se-pre-con"></div>
+
+<div id="mainFormDynamic">
+
+    <main-header></main-header>
+
+    <!-- Modal -->
+    <div id="message" class="modal fade modal-back" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content modal-warning">
+                <div class="modal-header">
+                    <h5 class="col-12 modal-title text-light text-center main-font">{{ alert_title }}</h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body  text-center">
+                    <h6 class="text-center text-light main-font">{{ alert_message }}</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12 text-center">
+        <!--h4 class="text-success main-font pb-2 pt-2">ESPECIE</h4-->
+
+        <form id="treeForm" name="treeForm" action="#" method="post">
+        <!--hidden inputs for parameters -->
+            <input type="hidden" v-model="selected_area">
+            <input type="hidden" v-model="selected_square">
+            <input type="hidden" v-model="current_lat">
+            <input type="hidden" v-model="current_lng">
+            <input type="hidden" v-model="selected_street">
+            <input type="hidden" v-model="calleOtra">
+            <input type="hidden" v-model="number">
+            <input type="hidden" v-model="neighborhood">
+            <input type="hidden" v-model="taza">
+        <!-- end of hidden inputs -->
+
+            <!--button type="submit" class="btn btn-success btn-block mt-3">Guardar cambios</button>
+            <button type="button" onclick="window.location.replace('home.html');" class="btn btn-danger btn-block">Cancelar</button -->
+        </form>
+
+
+    </div>
+</div>
+</body>
+</html>

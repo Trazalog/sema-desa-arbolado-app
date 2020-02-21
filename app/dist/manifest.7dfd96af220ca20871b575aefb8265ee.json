@@ -1,0 +1,41 @@
+{
+  "icons": [
+    {
+      "src": "./icon_512x512.8156973fa9bc476f9cfa109b7a214f5a.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon_384x384.b14f9302a56b963ff0bc70f96484b001.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon_256x256.3a27603a9cb3a889684b1397b91b0053.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon_192x192.729430ddf5ac3046860a22a79870b092.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon_128x128.c433ed61c1e9d9d019e36615c0d3c142.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon_96x96.8ad24753c54918ed2dee57314bf07056.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "name": "CENSARBO.SAN JUAN",
+  "short_name": "CENSARBO",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": ".",
+  "description": "CENSARBO.SAN JUAN",
+  "background_color": "#fff"
+}

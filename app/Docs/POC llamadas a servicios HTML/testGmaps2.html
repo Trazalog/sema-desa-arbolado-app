@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Proof of concept fot google maps Markers</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    
+  </head>
+
+
+  <body>
+    <button text="adadadsa" value="zzzz" onclick="getMarkersInfo();">sada</button>
+    <div id="map"></div>
+    <script>
+    $( document ).ready(function() {
+    console.log( "ready!" );
+    });
+
+      var myTreesList={data:[
+              {
+                lat: -31.5375000, 
+                lng:  -68.5363900, 
+                treename:'Algarrobo',
+                treeadreess:'San Martín 1980'
+              },
+              {
+                lat: -31.5390000,
+                lng:  -68.5380000,
+                treename:'Ceibo',
+                treeadreess:'Belgrano 3798'
+              }
+        ]};
+
+      // This example displays a marker at the center of Australia.
+      // When the user clicks the marker, an info window opens.
+
+      function drawMarkers(){
+      var i;
+      for (i = 0; i < myTreesList.data.length; i++) 
+      {
+        console.log(myTreesList.data[i].treename);
+        } 
+      }
+
+
+      function initMap() {
+
+drawMarkers();
+        var myLatLng = {lat: -31.5375000, lng:  -68.5363900};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 16,
+          center: myLatLng
+        });
+
+        var contentString = '<div id="content">'+
+            '<div id="MarkerDescription1">'+
+            '</div>'+
+            '<h4 id="firstHeading" class="firstHeading">Algarrobo</h4>'+
+            '<div id="bodyContent">'+
+            '<p><b>España Sur 1850</b>'+
+            '</div>'+
+            '<span>editar</span>'
+            '</div>';
+
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+        var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: 'San Juan Capital'
+
+        });
+
+        marker.addListener('click', function() {
+          infowindow.open(map, marker);
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpKOoFiMIRpJ5r8g0zPiNjCswiJ4BdbFc&callback=initMap">
+    </script>
+  </body>
+</html>

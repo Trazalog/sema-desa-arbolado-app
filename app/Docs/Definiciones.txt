@@ -1,0 +1,68 @@
+DEFINICIONES DE NOMBRES
+
+Files .ts (Controller):
+
+Primera letra de cada palabra con MAY y debe terminar en Controller, ejemplo: ArbolesCensadosController.ts
+
+=================================
+
+Files .ts (Model Class):
+
+Primera letra de cada palabra con MAY y debe ser una única palabra, ejemplo: Session.ts
+
+=================================
+
+Variables estaticas y finales:
+
+Deben ser con MAY ejemplo: _HOSTNAME_BACKEND
+
+Variables locales al data Vue o privadas a la class o controller:
+
+Debe ser minuscula y separadas con guion bajo, ejemplo: full_name
+
+=================================
+
+Metodos y funciones:
+
+Deben empezar con minuscula y la segunda palabra con MAY: updateProfile()
+
+=================================
+
+Servicio JSON:
+
+La respuesta de contener el formato siguiente:
+
+tanto las key como los values deben ser en minuscula y se expresan nombres en ingles:
+
+{
+ "nombre_servicio",
+ "status": "value",
+ "description": "value",
+ "data": {
+
+ }
+}
+
+Las key en caso de nombres de muchas palabras serán separados por _
+"nombre_servicio" por ejemplo "areas_asignadas"
+
+"status" puede ser: success = ok, error = errores lógicos, fatal = service con problemas (los que sean)
+"description": por ejemplo "areas obtenidas correctamente"
+"data" acá vendra la data dinamica desde el servicio y las key - values deben coincidir con las variables names de la
+class o controller usada para esto por ejemplo:
+
+"data": {
+    "username": "enzo.castro",
+    "session_id" "ioas98asjidoa78sd1"
+}
+
+otro ejemplo:
+
+"data": {
+    "full_name": "Enzo Luciano Castro",
+    "phone" "2645215521"
+    "field_with_large_name": "value1"
+}
+
+Esto va a facilitar que no haya que mirar o depender de que la class este lista o que el servicio este listo para que una
+u otra se vayan construyendo por estandar ya sabríamos que nombre iría en cada campo.

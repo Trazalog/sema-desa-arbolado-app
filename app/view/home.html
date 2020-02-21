@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">
+
+        if (localStorage.getItem("access_token") == null) {
+
+            window.location.replace("/");
+        }
+
+    </script>
+
+    <!-- Title -->
+    <title>Arbolado 2019</title>
+
+    <!-- Main Icon -->
+    <link rel="icon" type="text/css" href="../resource/image/main-icon.png">
+
+
+    <!-- Apple Icon -->
+    <link rel="apple-touch-icon" type="text/css" href="../resource/image/main-icon.png">
+
+
+    <!-- Meta information and responsive scale -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+</head>
+<body id="bodyMenu">
+
+    <!-- Loading -->
+    <div class="se-pre-con"></div>
+
+    <div id="mainHome">
+
+       <main-header></main-header>
+
+        <div class="list-group">
+
+            <a href="areasAsignadas.html" class="list-group-item list-group-item-action flex-column align-items-start text-dark">
+                <div class="d-flex w-100 justify-content-center">
+                    <h5 class="mb-1 main-font"><i class="fas fa-map-marked-alt"></i> Censar</h5>
+                </div>
+                <p class="mb-1 main-font text-center">Área geográfica.</p>
+            </a>
+            <a href="misArbolesCensados.html" class="list-group-item list-group-item-action flex-column align-items-start text-dark">
+                <div class="d-flex w-100 justify-content-center">
+                    <h5 class="mb-1 main-font"><i class="fas fa-tree"></i> Árboles</h5>
+                </div>
+                <p class="mb-1 main-font text-center">Ver mis árboles censados.</p>
+            </a>
+            <a href="miPerfil.html" class="list-group-item list-group-item-action flex-column align-items-start text-dark">
+                <div class="d-flex w-100 justify-content-center">
+                    <h5 class="mb-1 main-font"><i class="fas fa-user-tag"></i> Perfil</h5>
+                </div>
+                <p class="mb-1 main-font text-center">Ver/editar mi perfil de usuario.</p>
+            </a>
+            <a href="#" @click="syncLocalToServer()" class="list-group-item list-group-item-action flex-column align-items-start text-dark">
+                <div class="d-flex w-100 justify-content-center">
+                    <h5 class="mb-1 main-font"><i class="fas fa-sync"></i> Sincronizar</h5>
+                </div>
+                <p class="mb-1 main-font text-center">Guardar los datos offline en el servidor.</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

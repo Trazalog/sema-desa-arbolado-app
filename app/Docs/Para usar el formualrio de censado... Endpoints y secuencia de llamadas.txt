@@ -1,0 +1,19 @@
+Informado x capria, via slack el 13 de sept por la tarde
+
+chicos par ainstanciar un nuevo form llamar a
+https://dev-trazalog.com.ar:8246/arbolado/api/ds/v1.0.0/request_box
+{
+    "request_box":{
+        "_post_instanciarform":{
+            "form_id":2
+        },    
+        "_get_info_id":{
+            "a":"a"
+        }
+    }
+}
+esto les devuelve lo siguiente
+{"DATA_SERVICE_REQUEST_BOX_RESPONSE": {"infos": {"info_id": "12"}}}
+con ese info_id llamas a
+https://dev-trazalog.com.ar:8246/arbolado/api/ds/v1.0.0/formulario/{info_id}
+para dibujarlo

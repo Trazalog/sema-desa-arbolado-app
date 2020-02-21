@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- No need to import fontAwsome and jquery in other enviroments, just for POC propouses-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Proof of concept fot google maps Markers</title>
+    
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 75%;
+        width: 75%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+	  .map-tooltip-heading{
+	  	padding-top: 5px;
+	  	padding-right: 5px;
+	  	margin-top: 0px;
+	  	margin-bottom: 5px;
+	  }
+
+
+    </style>
+    
+  </head>
+
+
+  <body>
+    
+    <div id="map"></div>
+
+
+    <script>
+      //* Global variable for setting de tree list - It will be replaced by an rest service response. *//
+      var initLocation = {lat: -31.5375000, lng:  -68.5363900};
+      var contentStringsArray=[];
+      var markersArray=[];
+      var infowindowsArray=[];
+      var myTreesList={data:[
+              {
+                position:{lat: -31.5375000, lng:  -68.5363900},
+                treename:'Algarrobo',
+                treeadreess:'San Martín 1980'
+              },
+              {
+                position:{lat: -31.5390000, lng:  -68.5380000},
+                treename:'Ceibo',
+                treeadreess:'Belgrano 3798'
+              }
+        ]};
+
+        var cantidadArboles = myTreesList.data.length;
+
+      ////** MY FUNCTION **////
+
+      function setMarkersInfo(){
+      var fullMarkers={};
+      var i;
+      var contentStringAux1 = '<h4 id="firstHeading" class="mapTooltipHeading">';
+      var contentStringAux2 = '</h4>';    
+      var contentStringAux3 = '<span style="position:relative; float:right"><i class="far fa-edit"></i></span>';
+      var contentStringAux4 = '<span>';
+      var contentStringAux5 = '<span>';
+      
+      for (i = 0; i < myTreesList.data.length; i++) 
+      {
+      	var fullContentStringAux = contentStringAux1+myTreesList.data[i].treename+contentStringAux2+myTreesList.data[i].treeadreess+contentStringAux3+contentStringAux4+contentStringAux5;
+        contentStringsArray.push(fullContentStringAux);
+        console.log(myTreesList.data[i].treename);
+        console.log('Arreglo de contenidos:'+contentStringsArray[i]);
+        } 
+      }
+
+
+
+
+      function initMap() {
+			setMarkersInfo();
+			        
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 16,
+          center: initLocation
+        });
+		
+
+      for (i = 0; i < myTreesList.data.length; i++) 
+      {
+		  var positionAux = myTreesList.data[i].position;
+
+		  var markerAux = new google.maps.Marker({
+          position:positionAux,
+          map: map,
+          title: myTreesList.data[i].treename
+        });
+        console.log("GOOGLE ENZO MARKER = " + markerAux);
+		markersArray.push(markerAux);
+      }
+
+
+
+      console.log("MARK ARR ENZO" + JSON.stringify(markersArray[0]));
+
+      console.log('llamo a la función que crea los infoWindows');
+      createInfoWindows();
+	}
+
+
+
+function createInfoWindows(){
+
+
+
+ 
+for (i = 0; i < cantidadArboles; i++) {
+console.log("INFO ENZO = " + infowindowsArray[0].content);
+
+for (i = 0; i < cantidadArboles; i++)
+    {
+ 	markersArray[i].addListener('click', function() {
+			 			         infowindowsArray[i].open(maper, function(){new google.maps.InfoWindow({
+			 			       content:contentStringsArray[i]
+			 			       })};
+			 			       });
+	}
+	console.log('+++++++++++++++' + infowindowsArray);
+
+
+}
+
+
+
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpKOoFiMIRpJ5r8g0zPiNjCswiJ4BdbFc&callback=initMap">
+    </script>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<html>
+<head>
+	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+</head>
+
+<script type="text/javascript">
+
+$(document).ready(
+		
+
+
+	);
+	
+
+	function getStreets() {
+	$.get("https://api.myjson.com/bins/7ooif", function(listaCalles, textStatus, jqXHR) {
+		console.log(listaCalles);
+		document.getElementById("responseDiv").innerHTML = JSON.stringify(listaCalles);
+		return listaCalles;
+
+
+});
+	console.log('Respuesta del servicio con listado de calles');
+	
+
+	}
+
+
+function showStreets(){
+	$("#responseDiv").css("display", "block");
+
+	
+}
+
+
+</script>
+
+<body>
+		<button onclick="getStreets();" value="">click para obtener las calles</button>
+		<button onclick="showStreets();" value="">click para mostrar las calles</button>
+		
+		<div id="responseDiv" style="display:none">Wait for results</div>
+		<div id="responseDiv2">Wait for results</div>
+
+</body>
+
+</html>

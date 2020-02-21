@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <script type="text/javascript">
+
+        if (localStorage.getItem("access_token") != null) {
+
+            window.location.replace("home.html");
+        }
+
+    </script>
+    <!-- Title -->
+    <title>CENSARB.SAN JUAN</title>
+
+    <!-- Main Icon -->
+    <link rel="icon" type="text/css" href="../resource/image/main-icon.png">
+
+    <!-- Apple Icon -->
+    <link rel="apple-touch-icon" type="text/css" href="../resource/image/main-icon.png">
+
+    <!-- Meta information and responsive scale -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+</head>
+<!-- Body -->
+<body id="bodyIndex">
+
+    <!-- Loading -->
+    <div class="se-pre-con"></div>
+
+
+    <div id="mainLogin">
+
+        <!-- Modal -->
+        <div id="message" class="modal fade modal-back" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content modal-warning">
+                    <div class="modal-header">
+                        <h5 class="col-12 modal-title text-light text-center main-font">{{ alert_title }}</h5>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body  text-center">
+                        <h6 class="text-center text-light main-font">{{ alert_message }}</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 text-center pt-2">
+
+            <img class="text-center pb-1" src="../resource/image/main-icon.png" width="150" height="auto" alt="CENSARB.SAN JUAN">
+
+            <h5 class="text-success main-font pb-2 pt-4">CENSARBO.SAN JUAN</h5>
+
+            <form id="login" name="login" action="#" method="post"
+                  @submit.prevent="validateForm"
+                  v-on:submit="preventMultiSubmit">
+
+                <div class="input-group mx-auto input-max-width">
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-user fa-fw"></i></span>
+                    </div>
+
+                    <label for="username"></label>
+                    <input id="username" name="username" type="text" class="form-control text-lowercase" placeholder="Usuario"
+                           data-vv-as="usuario"
+                           :class="{'validate-error': errors.has('username')}"
+                           v-validate="{ required:true, min:4, max:100 }"
+                           v-model="username">
+                </div>
+                <div class="mx-auto pb-4">
+                    <span class="text-danger text-center main-font">{{ errors.first('username') }}</span>
+                </div>
+
+                <div class="input-group mx-auto input-max-width">
+
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-key fa-fw"></i></span>
+                    </div>
+
+                    <label for="password"></label>
+                    <input id="password" name="password" type="password" class="form-control" placeholder="Contraseña"
+                           data-vv-as="contraseña"
+                           :class="{'validate-error': errors.has('password')}"
+                           v-validate="{ required:true, min:4, max:12 }"
+                           v-model="password">
+
+                    <div id="password_show_hide" class="input-group-prepend"
+                         @click="showHidePasswordField" title="Mostrar contraseña">
+                        <span class="input-group-text"><i class="fas fa-eye-slash fa-fw"></i></span>
+                    </div>
+                </div>
+                <div class="mx-auto pb-4">
+                    <span class="text-danger text-center main-font">{{ errors.first('password') }}</span>
+                </div>
+
+                <div class="input-group mx-auto input-max-width">
+                    <button type="submit" class="btn btn-success main-font btn-block">
+                        <i class="fas fa-sign-in-alt"></i> Ingresar
+                    </button>
+                </div>
+            </form>
+
+            <!-- Signal Quality Indicator -->
+            <hr class="input-max-width">
+            <div class="row mx-auto mt-4 input-max-width">
+                <div class="col-12 py-auto q-signal-indicator-container">
+                    <i id="signal" class="col-2 fas fa-broadcast-tower q-signal-indicator qgood-icon"></i>
+                    <span class="col-10 text-mini q-signal-indicator-text"> Calidad de conexión: {{ connection_quality }}</span>
+                </div>
+            </div>
+            <!-- End of Signal Quality Indicator -->
+        </div>
+    </div>
+</body>
+<footer>
+    <img class="text-center pb-1 mx-auto" style="display:block;" src="../resource/image/logo-gobierno.png" width="200" height="auto" alt="CENSARB.SAN JUAN">
+</footer>
+</html>

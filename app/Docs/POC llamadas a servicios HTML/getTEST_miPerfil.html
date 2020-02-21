@@ -1,0 +1,70 @@
+<html>
+<head>
+	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+</head>
+
+<script type="text/javascript">
+var fullName='';
+var email='';
+var phone='';
+var password='';
+var profilePic='';
+
+$(document).ready(
+		
+	function getProfileData() {
+	$.get("https://api.myjson.com/bins/1bqa7d", function(userData, textStatus, jqXHR) {
+		console.log(userData);
+		document.getElementById("responseDiv").innerHTML = JSON.stringify(userData);
+		fullName = JSON.stringify(userData.user.data.name);
+		email = JSON.stringify(userData.user.data.email);
+		phone = JSON.stringify(userData.user.data.phone);
+		password = JSON.stringify(userData.user.data.password);
+		profilePic = userData.user.data.profilePic;
+		return userData;
+	});
+		
+	}
+
+	);
+	
+
+
+
+function writeResponse(){
+	var firstP = document.createElement("p");  
+	var secondP = document.createElement("p");
+	var thirdP = document.createElement("p");
+	var fourthP = document.createElement("p");
+	var profileimg = document.createElement("img");
+	firstP.innerHTML = fullName;
+	secondP.innerHTML = email;
+	thirdP.innerHTML = phone;
+	fourthP.innerHTML = password;
+	profileimg.src = 'data:'+profilePic;
+	document.getElementById("detailedDIv").appendChild(firstP);
+	document.getElementById("detailedDIv").appendChild(secondP);
+	document.getElementById("detailedDIv").appendChild(thirdP);
+	document.getElementById("detailedDIv").appendChild(fourthP);
+	document.getElementById("detailedDIv").appendChild(profileimg);
+	
+	//$("#responseDiv").css("display", "block");
+
+}
+
+
+</script>
+
+<body>
+		<div id="main" >
+			<button onclick="writeResponse();" value="">clickMe!</button>
+			<span>Click para ver los datos del user</span>
+		</div>
+		<div id="responseDiv" style="display:none">Wait for results</div>
+		<div id="detailedDIv" style="display:block">Wait for results</div>
+
+
+		
+</body>
+
+</html>
