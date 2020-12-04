@@ -31,11 +31,11 @@
       "type": "image/png"
     }
   ],
-  "name": "CENSARBO.SAN JUAN",
-  "short_name": "CENSARBO",
+  "name": "CENSARB.SAN JUAN",
+  "short_name": "CENSARB",
   "orientation": "portrait",
   "display": "standalone",
   "start_url": ".",
-  "description": "CENSARBO.SAN JUAN",
+  "description": "CENSARB.SAN JUAN",
   "background_color": "#fff"
 }

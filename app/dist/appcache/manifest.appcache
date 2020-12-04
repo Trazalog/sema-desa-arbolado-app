@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#ver:4dc3bd5848a06cce5ec16e24b2927ef4c2685815
+#ver:0cca9b5eaba87760bc212cca7b399947702cf7fe
 #plugin:5.0.7
 
 CACHE:
@@ -13,6 +13,10 @@ CACHE:
 ./resource/image/marker-icon-2x.png
 ./resource/image/marker-icon.png
 ./resource/image/marker-shadow.png
+./resource/image/legend/calles_2020_3.png
+./resource/image/legend/capital_manzanas_0.png
+./resource/image/legend/espacios_verdes_2020_1.png
+./resource/image/legend/infraestructura_2.png
 ./resource/font/fa-regular-400.woff2
 ./resource/font/fa-regular-400.woff
 ./resource/font/fa-regular-400.eot
@@ -30,6 +34,10 @@ CACHE:
 ./resource/font/fa-solid-900.svg
 ./core.css
 ./core.js
+./resource/js/data/calles_2020_3.js
+./resource/js/data/capital_manzanas_0.js
+./resource/js/data/espacios_verdes_2020_1.js
+./resource/js/data/infraestructura_2.js
 ./IndexController.js
 ./
 ./HomeController.js
