@@ -37,6 +37,7 @@ new vue ({
         mymap:null
     },
     mounted(){
+        console.log("RODOLFO muy CAMPEON");
         this.initMap();
         //this.getMyTrees();
 
@@ -289,18 +290,18 @@ new vue ({
                 i++;
             });
             //@ts-ignore
-            resetLabels([layer_calles2020_3]);
+            resetLabels([layer_calles_2020_3]);
             mymapaux.on("zoomend", function(){
                 //@ts-ignore
-                resetLabels([layer_calles2020_3]);
+                resetLabels([layer_calles_2020_3]);
             });
             mymapaux.on("layeradd", function(){
                 //@ts-ignore
-                resetLabels([layer_calles2020_3]);
+                resetLabels([layer_calles_2020_3]);
             });
             mymapaux.on("layerremove", function(){
                 //@ts-ignore
-                resetLabels([layer_calles2020_3]);
+                resetLabels([layer_calles_2020_3]);
             });
 ///////////
 

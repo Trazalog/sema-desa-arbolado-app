@@ -8,7 +8,8 @@ let precss = require('precss');
 let OfflinePlugin = require('offline-plugin');
 let WebpackPwaManifest = require('webpack-pwa-manifest');
 let VueLoaderPlugin = require('vue-loader/lib/plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+let CopyPlugin;
+CopyPlugin = require('copy-webpack-plugin');
 
 let pathsToClean = [
     "dist",
@@ -366,6 +367,10 @@ module.exports = [
                     "./core.js",
 
                     /*NewCustomMaps*/
+                    "./resource/js/leaflet.js",
+                    "./resource/js/rbush.min.js",
+                    "./resource/js/labelgun.min.js",
+                    "./resource/js/labels.js",
                     "./resource/js/data/calles_2020_3.js",
                     "./resource/js/data/capital_manzanas_0.js",
                     "./resource/js/data/espacios_verdes_2020_1.js",
@@ -469,6 +474,10 @@ module.exports = [
                             "./core.js",
 
                             /*NewCustomMaps*/
+                            "./resource/js/leaflet.js",
+                            "./resource/js/rbush.min.js",
+                            "./resource/js/labelgun.min.js",
+                            "./resource/js/labels.js",
                             "./resource/js/data/calles_2020_3.js",
                             "./resource/js/data/capital_manzanas_0.js",
                             "./resource/js/data/espacios_verdes_2020_1.js",

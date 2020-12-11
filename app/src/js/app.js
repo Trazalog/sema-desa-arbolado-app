@@ -46,8 +46,10 @@ import '../../resource/image/legend/calles_2020_3.png';
 import '../../resource/image/legend/capital_manzanas_0.png';
 import '../../resource/image/legend/espacios_verdes_2020_1.png';
 import '../../resource/image/legend/infraestructura_2.png';
-
-
+import '../../resource/js/leaflet.js';
+import '../../resource/js/rbush.min.js';
+import '../../resource/js/labelgun.min.js';
+import '../../resource/js/labels.js';
 import '../../resource/js/data/calles_2020_3.js';
 import '../../resource/js/data/capital_manzanas_0.js';
 import '../../resource/js/data/espacios_verdes_2020_1.js';

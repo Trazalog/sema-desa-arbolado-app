@@ -296,18 +296,18 @@ let vue1 = new vue ({
                         i++;
                     });
                     //@ts-ignore
-                    resetLabels([layer_calles2020_3]);
+                    resetLabels([layer_calles_2020_3]);
                     mymap.on("zoomend", function(){
                         //@ts-ignore
-                        resetLabels([layer_calles2020_3]);
+                        resetLabels([layer_calles_2020_3]);
                     });
                     mymap.on("layeradd", function(){
                         //@ts-ignore
-                        resetLabels([layer_calles2020_3]);
+                        resetLabels([layer_calles_2020_3]);
                     });
                     mymap.on("layerremove", function(){
                         //@ts-ignore
-                        resetLabels([layer_calles2020_3]);
+                        resetLabels([layer_calles_2020_3]);
                     });
 
 /////////
