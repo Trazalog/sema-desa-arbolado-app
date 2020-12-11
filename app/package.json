@@ -10,7 +10,7 @@
   },
   "scripts": {
     "Development": "webpack-dev-server",
-    "Production_UNIX": "webpack -p && rm -f /usr/share/nginx/html/*js && rm -f /usr/share/nginx/html/*css && rm -f /usr/share/nginx/html/*html && rm -rf /usr/share/nginx/html/resource && rm -rf /usr/share/nginx/html/src && cp -r ./dist/* /usr/share/nginx/html/",
+    "Production_UNIX": "webpack -p && rm -f /var/www/html/*js && rm -f /var/www/html/*css && rm -f /var/www/html/*html && rm -rf /var/www/html/resource && rm -rf /var/www/html/src && cp -r ./dist/* /var/www/html/",
     "Production_WIN": "webpack -p"
   },
   "dependencies": {

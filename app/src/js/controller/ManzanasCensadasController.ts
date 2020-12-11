@@ -32,6 +32,7 @@ new vue ({
         my_square:null,
         my_square_array_names:[],
         my_square_array_ids:[],
+        my_square_array: []
     },
     created(){
         this.getMySquares();
@@ -90,13 +91,29 @@ new vue ({
 
                     for (let i = 0; i < square_count; i++){
 
-                        console.log("manzan name: " + response.data.tree_list.data.area[area].square[i].name);
-                        let square_name = response.data.tree_list.data.area[area].square[i].name;
-                        let square_id = response.data.tree_list.data.area[area].square[i].id;
+                        if (response.data.tree_list.data.area[area].square[i].tree.length > 0){
 
-                        this.my_square_array_names.push(square_name);
-                        this.my_square_array_ids.push(square_id);
-                        console.log('ARREGLO DE IDS DE MANZANAS ====> '+this.my_square_array_ids[i]);
+                            console.log("manzan name: " + response.data.tree_list.data.area[area].square[i].name);
+                            let square_name = response.data.tree_list.data.area[area].square[i].name;
+                            let square_id = response.data.tree_list.data.area[area].square[i].id;
+
+                            this.my_square_array_names.push(square_name);
+                            this.my_square_array_ids.push(square_id);
+                            this.my_square_array.push(i);
+                            console.log('ARREGLO DE IDS DE MANZANAS ====> '+this.my_square_array_ids[i]);
+
+                        } else {
+
+                            console.log(" **** Not show because tree empty **** ");
+                            console.log("Area value = " + area);
+                            console.log("Manzana name = " + response.data.tree_list.data.area[area].square[i].name);
+                            console.log("Manzana id = " + response.data.tree_list.data.area[area].square[i].id);
+                            console.log("Tree length = " + response.data.tree_list.data.area[area].square[i].tree.length);
+                            console.log("Tree array = " + response.data.tree_list.data.area[area].square[i].tree);
+                            console.log("Index i = " + i);
+                            console.log(" ================== EOM ================== ");
+
+                        }
                     }
 
                 } else {
@@ -118,7 +135,7 @@ new vue ({
             window.location.replace("arbolesCensados.html?" +
                 "selected_area=" + this.searchAndGetParamFromURL("selected_area") +
                 "&area_id=" + this.searchAndGetParamFromURL("area_id") +
-                "&selected_square=" + index +
+                "&selected_square=" + this.my_square_array[index] +
                 "&square_id=" + this.my_square_array_ids[index] +
                 "&cens_id=" + this.searchAndGetParamFromURL("cens_id"))
         },

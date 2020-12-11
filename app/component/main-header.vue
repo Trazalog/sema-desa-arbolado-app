@@ -6,7 +6,7 @@
                     <a href="home.html">
                         <img class="text-center header-logo" src="../resource/image/main-icon.png" alt="CENSARBO.SAN JUAN" width="50" height="50">
                     </a>
-                    <span style="color:#FEFEFE; font-size: 10px">CENSARBO.SAN JUAN</span>
+                    <span style="color:#FEFEFE; font-size: 10px">CENS<b>ARB</b>.SAN JUAN</span>
                 </div>
                 <div class="col-5 text-right">
                     <p class="main-font text-white text-light mb-0 pb-0 text-mini">{{ username }}</p>

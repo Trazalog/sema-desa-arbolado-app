@@ -32,7 +32,7 @@ new vue ({
     data: {
         my_area_array_names:[],
         my_area_array_ids:[],
-        area_index: null,
+        area_index: [],
         cens_id: '',
     },
     created(){
@@ -53,14 +53,21 @@ new vue ({
                             let treeCount =  response.data.tree_list.data.area[i].square[j].tree.length;
                             let areaAux = response.data.tree_list.data.area[i].name;
                             let areaId = response.data.tree_list.data.area[i].id;
+
                             if (treeCount > 0 && i===0){
+
                                 this.my_area_array_ids.push(areaId);
+                                this.area_index.push(i);
                                 areaArrayAux.push(areaAux);
+
                             }else if (treeCount > 0 && i>0 && (areaAux!== this.my_area_array_names[i-1])){
+
                                 console.log(areaAux + ' Debería ser mostrada en pantalla porque tiene ' + treeCount + 'árboles censados');
                                 areaArrayAux.push(areaAux);
                                 this.my_area_array_ids.push(areaId);
+                                this.area_index.push(i);
                             }
+
                             this.cens_id = response.data.tree_list.data.area[i].cens_id;
                         }
                     }
@@ -72,6 +79,8 @@ new vue ({
                     console.log('before ids: ' + this.my_area_array_ids);
                     this.my_area_array_ids = this.my_area_array_ids.reduce(function(a, b){if(a.indexOf(b)<0)a.push(b);return a;},[]);
                     console.log('after ids: ' + this.my_area_array_ids);
+
+                    this.area_index = this.area_index.reduce(function(a, b){if(a.indexOf(b)<0)a.push(b);return a;},[]);
 
                     // Remove loading
                     $(".se-pre-con").fadeOut("slow");
@@ -90,7 +99,7 @@ new vue ({
         selectedArea(index: number) {
 
             window.location.replace("manzanasCensadas.html?" +
-                "selected_area=" + index +
+                "selected_area=" + this.area_index[index] +
                 "&area_id=" + this.my_area_array_ids[index] +
                 "&cens_id=" + this.cens_id)
         }

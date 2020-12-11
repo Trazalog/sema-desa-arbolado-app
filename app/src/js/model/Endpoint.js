@@ -162,16 +162,16 @@ var Endpoint = /** @class */ (function () {
     * ==========
     */
     Endpoint._URL_LOGIN = "/censarb/api/token";
-    Endpoint._URL_GET_USER_PROFILE = "/censarb/arbolado/api/ds/v1.0.0/perfil";
-    Endpoint._URL_UPDATE_USER_PROFILE = "/censarb/arbolado/api/ds/v1.0.0/perfil";
-    Endpoint._URL_GET_USER_TREE = "/censarb/arbolado/api/v1.0.0/area";
-    Endpoint._URL_INSTANCE_FORM = "/censarb/arbolado/api/ds/v1.0.0/request_box";
-    Endpoint._URL_PUT_FORM = "/censarb/arbolado/api/ds/v1.0.0/_put_formulario_batch_req";
-    Endpoint._URL_POST_FORM_OFFLINE = "/censarb/arbolado/api/v1.0.0/arbol";
-    Endpoint._URL_POST_NEW_TREE = "/censarb/arbolado/api/ds/v1.0.0/arbol";
-    Endpoint._URL_GET_TREE_DATA = "/censarb/arbolado/api/ds/v1.0.0/arbol";
-    Endpoint._URL_GET_FORM = "/censarb/arbolado/api/ds/v1.0.0/formulario/";
-    Endpoint._URL_GET_FORM_TEMPLATE = "/censarb/arbolado/api/ds/v1.0.0/formulario/template/2";
+    Endpoint._URL_GET_USER_PROFILE = "/censarb/api/arbolado/api/ds/v1.0.0/perfil";
+    Endpoint._URL_UPDATE_USER_PROFILE = "/censarb/api/arbolado/api/ds/v1.0.0/perfil";
+    Endpoint._URL_GET_USER_TREE = "/censarb/api/arbolado/api/v1.0.0/area";
+    Endpoint._URL_INSTANCE_FORM = "/censarb/api/arbolado/api/ds/v1.0.0/request_box";
+    Endpoint._URL_PUT_FORM = "/censarb/api/arbolado/api/ds/v1.0.0/_put_formulario_batch_req";
+    Endpoint._URL_POST_FORM_OFFLINE = "/censarb/api/arbolado/api/v1.0.0/arbol";
+    Endpoint._URL_POST_NEW_TREE = "/censarb/api/arbolado/api/ds/v1.0.0/arbol";
+    Endpoint._URL_GET_TREE_DATA = "/censarb/api/arbolado/api/ds/v1.0.0/arbol";
+    Endpoint._URL_GET_FORM = "/censarb/api/arbolado/api/ds/v1.0.0/formulario/";
+    Endpoint._URL_GET_FORM_TEMPLATE = "/censarb/api/arbolado/api/ds/v1.0.0/formulario/template/2";
     return Endpoint;
 }());
 export { Endpoint };

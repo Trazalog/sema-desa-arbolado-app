@@ -44,8 +44,7 @@ export class User {
             data: data,
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
-                //"Authorization": "Basic VW9GckRZbWxRQU5jNzhEZGJVWTNvcGZ4aWZ3YTppbU1ycUJlZDNIRW01MDU2aXZsd2ZFOTl6TjRh"
-                "Authorization": "Basic M0t4SUtfV2tQQUtSUGlzQWczaXdIRnlqZm13YTpsNWs5YlYzYTZpZnBqMnNMQ2tmc0JXWVpzVThh"
+                "Authorization": "Basic VW9GckRZbWxRQU5jNzhEZGJVWTNvcGZ4aWZ3YTppbU1ycUJlZDNIRW01MDU2aXZsd2ZFOTl6TjRh"
             }
         });
     }
@@ -109,6 +108,8 @@ export class User {
     public static async getSquare(){
 
         let url: string = Endpoint.PROTOCOL + "://" + Endpoint.HOSTNAME_BACKEND + ":" + Endpoint.PORT_BACKEND + Endpoint.URL_GET_USER_TREE + "/" + encodeURIComponent(store.get("username"));
+
+        console.log("URL GET SQUARE = " + url);
 
         return await axios({
             method: "GET",

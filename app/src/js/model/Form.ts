@@ -28,6 +28,25 @@ export class Form {
         });
     }
 
+
+    /*** Get a completed form for show its data on screen to be modified ***/
+    public static async getFormData(formID){
+        //this is an example for the URL https://soa.sanjuan.gob.ar/censarb/api/arbolado/api/ds/v1.0.0/formulario/'+this.formID
+        let url: string = Endpoint.PROTOCOL + "://" + Endpoint.HOSTNAME_BACKEND + ":" + Endpoint.PORT_BACKEND + Endpoint.URL_GET_FORM + formID;
+        return await axios({
+            method: "GET",
+            url: url,
+            timeout: Endpoint.TIMEOUT,
+            withCredentials: false,
+            headers: {
+                'Authorization': store.get("token_type") + ' ' + store.get('access_token'),
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
+
+
     /*** Instance form ***/
     public static async createInstance(){
 
@@ -96,12 +115,12 @@ export class Form {
     }
 
 
-    public static async sendOnlyTreePicture(data: any){
+    public static async sendOnlyTreePicture(data: any, method: string){
 
         let url: string = Endpoint.PROTOCOL + "://" + Endpoint.HOSTNAME_BACKEND + ":" + Endpoint.PORT_BACKEND + Endpoint.URL_POST_NEW_TREE;
 
         return await axios({
-            method: "POST",
+            method: method,
             url: url,
             timeout: Endpoint.TIMEOUT,
             withCredentials: false,

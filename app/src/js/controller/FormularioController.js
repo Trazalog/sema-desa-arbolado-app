@@ -2,7 +2,6 @@ import '../app';
 require('bootstrap');
 import * as $ from 'jquery';
 import Vue from 'vue';
-import axios from 'axios';
 import MainHeader from '../../../component/main-header.vue';
 import { Form } from '../model/Form';
 import VeeValidate, { Validator } from 'vee-validate';
@@ -39,13 +38,18 @@ var vue1 = new vue({
         neighborhood: '',
         taza: '',
         formID: '',
-        cens_id: ''
+        cens_id: '',
+        arrFormTemplate: [],
+        tree_id: '',
+        audit_lat: '',
+        audit_lng: ''
     },
     mounted: function () {
-        if (Connectivity.checkInternetSpeed() !== "offline") {
-            this.instanceForm(); // Aplica si está ONLINE!!!!!!!!!!!!! NO aplica, porque la instancia se va a crear y guardar cambios contra el nuevo servicio.
-        }
-        this.initPage();
+        $(".se-pre-con").fadeIn("fast");
+        //if(Connectivity.checkInternetSpeed() !== "offline") {
+        //this.instanceForm(); // Aplica si está ONLINE!!!!!!!!!!!!! NO aplica, porque la instancia se va a crear y guardar cambios contra el nuevo servicio.
+        //}
+        this.getAuditPosition();
     },
     methods: {
         searchAndGetParamFromURL: function (param) {
@@ -97,9 +101,30 @@ var vue1 = new vue({
             }
             return response;
         },
-        initPage: function () {
-            if (this.searchAndGetParamFromURL('taza') == 'Taza con árbol') {
+        getAuditPosition: function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = { lat: position.coords.latitude, lng: position.coords.longitude };
+                    //this.audit_lat = pos.lat;
+                    //this.audit_lng = pos.lng;
+                    vue1.$data.audit_lat = pos.lat;
+                    vue1.$data.audit_lng = pos.lng;
+                    console.log("Posición de auditoría ==> " + JSON.stringify(pos));
+                    $(".se-pre-con").fadeOut("slow");
+                    //this.initPage();
+                    vue1.initPage();
+                });
+            }
+            else {
                 $(".se-pre-con").fadeOut("slow");
+                console.log('El navegador no soporta Geolocalización');
+            }
+        },
+        initPage: function (pos) {
+            /*ENZO, en la fc getAuditPosition se calcula la posición actual del censista.*/
+            //this.getAuditPosition();
+            if (this.searchAndGetParamFromURL('taza') == 'Taza con árbol') {
+                //$(".se-pre-con").fadeOut("slow");
                 var id = parseInt('', 10);
                 /*Si estoy editando un árbol busco el parámetro de ID en la URL*/
                 this.formID = this.searchAndGetParamFromURL("form_id");
@@ -112,6 +137,7 @@ var vue1 = new vue({
                 //appending buttons to form
                 //this.drawButtons();
                 //Setting values for params
+                this.tree_id = this.searchAndGetParamFromURL("tree_id");
                 this.selected_area = this.searchAndGetParamFromURL("selected_area");
                 this.area_id = this.searchAndGetParamFromURL("area_id");
                 this.square_id = this.searchAndGetParamFromURL("square_id");
@@ -123,6 +149,10 @@ var vue1 = new vue({
                 this.neighborhood = this.searchAndGetParamFromURL("neighborhood");
                 this.cens_id = this.searchAndGetParamFromURL("cens_id");
                 this.taza = this.searchAndGetParamFromURL("taza");
+                /*Si estoy editando un árbol busco el parámetro de ID en la URL*/
+                this.formID = this.searchAndGetParamFromURL("form_id");
+                console.log('New Form ID: ' + this.formID);
+                this.getFormElements(this.formID);
             }
         },
         goBack: function () {
@@ -155,7 +185,7 @@ var vue1 = new vue({
                             //window.location.replace("/");
                         }
                         var id = parseInt(response.data.DATA_SERVICE_REQUEST_BOX_RESPONSE.infos.info_id, 10);
-                        console.log('New Form ID: ' + id);
+                        console.log('New Form ID instance form: ' + id);
                         _this.formID = id;
                         _this.getFormElements(id);
                     })
@@ -173,6 +203,7 @@ var vue1 = new vue({
                     //appending buttons to form
                     this.drawButtons();
                     //Setting values for params
+                    this.tree_id = this.searchAndGetParamFromURL("tree_id");
                     this.selected_area = this.searchAndGetParamFromURL("selected_area");
                     this.area_id = this.searchAndGetParamFromURL("area_id");
                     this.square_id = this.searchAndGetParamFromURL("square_id");
@@ -193,8 +224,13 @@ var vue1 = new vue({
                 this.getFormElements(this.formID);
             }
         },
-        getFormElements: function () {
+        getFormElements: function (form_id) {
+            var _this = this;
+            console.log("form_id referencia de la variable de la funcion : " + form_id);
+            $(".se-pre-con").fadeIn("fast");
+            console.log('Acabo de entrar en get FormElements');
             //Setting values for params
+            this.tree_id = this.searchAndGetParamFromURL("tree_id");
             this.selected_area = this.searchAndGetParamFromURL("selected_area");
             this.area_id = this.searchAndGetParamFromURL("area_id");
             this.square_id = this.searchAndGetParamFromURL("square_id");
@@ -208,22 +244,23 @@ var vue1 = new vue({
             this.taza = this.searchAndGetParamFromURL("taza");
             /*Esto debe ser reemplazado x lo que tenga en el JSON del localstorage.*/
             /*REEMPLZAO LA LLAMADA AXIOS X LA CONSULTA AL LOCAL STORAGE*/
-            var arrFormTemplate = [];
             var itemsCount = 0;
             console.log('form_id leído dentro de la fc getFormElements -----  ' + this.formID);
-            if (this.formID == '' || this.formID == null) {
+            //let arrFormTemplate;
+            if (form_id == '' || form_id == null || form_id == "null") {
+                console.log('dentro de getForm Elements, evaluo this.Form ID y obtengo el siguiente valor:' + this.formID);
                 /*Si estoy censando un nuevo árbol, uso los campos del localstorage, sino, tengo que obtener la respuesta del servicio para pintar campos y valores del árbol*/
-                arrFormTemplate = store.get('formTemplate');
+                this.arrFormTemplate = store.get('formTemplate');
+                console.log('He asignado this.arrFormTemplate desde el local Storage porque se trata de un nuevo árbol y no una modificación');
             }
             else {
-                axios.get('https://soa.sanjuan.gob.ar/censarb/arbolado/api/ds/v1.0.0/formulario/' + this.formID, {
-                    'headers': { 'Authorization': 'Bearer ' + store.get("access_token")
-                    }
-                })
-                    .then(function (response) {
-                    arrFormTemplate = response.data;
-                })
-                    .catch(function (err) {
+                /*This is the new part,llevo la llamada Axios a la clase form*/
+                console.log('Estoy por llamar a la fc getFormData de la clase Form');
+                Form.getFormData(this.formID).then(function (response) {
+                    console.log("New data from class Form, method getFormData" + JSON.stringify(response.data));
+                    _this.arrFormTemplate = response.data;
+                    console.log('he asignado a la var this.arrFormTemplate, el valor de la respuesta del servicio en getFormData ==>' + JSON.stringify(_this.arrFormTemplate));
+                }).catch(function (err) {
                     if (err.response.status === 401) {
                         //Session.invalidate();
                         //window.location.replace("/");
@@ -237,90 +274,91 @@ var vue1 = new vue({
                     message.modal("show");
                 });
             }
-            /*Desde acá*/
-            console.log("El formulario es: " + arrFormTemplate.formulario);
-            itemsCount = arrFormTemplate.formulario.items.length;
-            console.log("La cantidad de ítems del formuario es " + itemsCount);
-            for (var i = 0; i < itemsCount; i++) {
-                //recorro el json y pusheo los tipos de cada elemento dentro de un arreglo
-                console.log("TIPO DE ELEM: " + arrFormTemplate.formulario.items[i].tipo);
-                this.formElements.push(arrFormTemplate.formulario.items[i].tipo);
-            }
-            console.log('Arreglo de tipos' + this.formElements);
-            if (this.taza != "Taza con árbol") {
-                this.formID = 0;
-                //drawing photo component
-                this.drawFile();
-                //appending buttons to form
-                this.drawButtons();
-            }
-            else {
-                /*Analizo los tipos y llamo a las fc correspondiente*/
+            setTimeout(function () {
+                /*Desde acá*/
+                console.log("El formulario es: " + _this.arrFormTemplate.formulario);
+                itemsCount = _this.arrFormTemplate.formulario.items.length;
+                console.log("La cantidad de ítems del formuario es " + itemsCount);
                 for (var i = 0; i < itemsCount; i++) {
-                    var id_serial_Aux = arrFormTemplate.formulario.items[i].id_serial;
-                    var tipo_Aux = arrFormTemplate.formulario.items[i].tipo;
-                    var deshabilitado_Aux = arrFormTemplate.formulario.items[i].deshabilitado;
-                    var label_Aux = arrFormTemplate.formulario.items[i].label;
-                    var requerido_Aux = arrFormTemplate.formulario.items[i].requerido;
-                    var nombre_Aux = arrFormTemplate.formulario.items[i].nombre;
-                    var cond_habilitado_Aux = arrFormTemplate.formulario.items[i].cond_habilitado;
-                    var cond_mostrar_Aux = arrFormTemplate.formulario.items[i].cond_mostrar;
-                    var name_Aux = arrFormTemplate.formulario.items[i].name;
-                    var orden_Aux = arrFormTemplate.formulario.items[i].orden;
-                    var id_Aux = arrFormTemplate.formulario.items[i].id;
-                    var valores_Aux = arrFormTemplate.formulario.items[i].valores.valor;
-                    var mostrar_Aux = arrFormTemplate.formulario.items[i].mostrar;
-                    var actual_value = arrFormTemplate.formulario.items[i].valor; /*This is the actualValue for this item*/
-                    /*is it a section title?*/
-                    if (this.formElements[i] == 'titulo') {
-                        this.drawTitle(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux);
-                    }
-                    /*is it a section sub-title?*/
-                    if (this.formElements[i] == 'titulo2') {
-                        this.drawTitle2(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux);
-                    }
-                    /*is it an input?*/
-                    if (this.formElements[i] == 'input') {
-                        this.drawInput(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
-                    }
-                    /*is it an numeric input?*/
-                    if (this.formElements[i] == 'numerico') {
-                        this.drawNumericInput(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
-                    }
-                    /*is it a select?*/
-                    if (this.formElements[i] == 'select') {
-                        //console.log(response.data.formulario.items[i].valores);
-                        this.drawSelect(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
-                    }
-                    /*is it an checkbox?*/
-                    if (this.formElements[i] == 'check') {
-                        this.drawCheckBox(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
-                    }
-                    /*is it a radioButton?*/
-                    if (this.formElements[i] == 'radio') {
-                        this.drawRadioButtons(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
-                    }
-                    /*is it a date input?*/
-                    if (this.formElements[i] == 'date') {
-                        this.drawDate(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
-                    }
-                    /*is it a textArea?*/
-                    if (this.formElements[i] == 'textarea') {
-                        this.drawTextArea(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
-                    }
-                    /*is it a file?*/
-                    if (this.formElements[i] == 'file') {
-                        this.drawFile(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
-                    }
+                    //recorro el json y pusheo los tipos de cada elemento dentro de un arreglo
+                    console.log("TIPO DE ELEM: " + _this.arrFormTemplate.formulario.items[i].tipo);
+                    _this.formElements.push(_this.arrFormTemplate.formulario.items[i].tipo);
                 }
-                //drawing photo component
-                this.drawFile();
-                //appending buttons to form
-                this.drawButtons();
-            }
-            // Remove loading after all elements has been dwawed
-            $(".se-pre-con").fadeOut("slow");
-            /*Hasta acá, sacar de la llamada axios a la función general*/
+                console.log('Arreglo de tipos' + _this.formElements);
+                if (_this.taza != "Taza con árbol") {
+                    _this.formID = 0;
+                    //drawing photo component
+                    _this.drawFile();
+                    //appending buttons to form
+                    _this.drawButtons();
+                }
+                else {
+                    /*Analizo los tipos y llamo a las fc correspondiente*/
+                    for (var i = 0; i < itemsCount; i++) {
+                        var id_serial_Aux = _this.arrFormTemplate.formulario.items[i].id_serial;
+                        var tipo_Aux = _this.arrFormTemplate.formulario.items[i].tipo;
+                        var deshabilitado_Aux = _this.arrFormTemplate.formulario.items[i].deshabilitado;
+                        var label_Aux = _this.arrFormTemplate.formulario.items[i].label;
+                        var requerido_Aux = _this.arrFormTemplate.formulario.items[i].requerido;
+                        var nombre_Aux = _this.arrFormTemplate.formulario.items[i].nombre;
+                        var cond_habilitado_Aux = _this.arrFormTemplate.formulario.items[i].cond_habilitado;
+                        var cond_mostrar_Aux = _this.arrFormTemplate.formulario.items[i].cond_mostrar;
+                        var name_Aux = _this.arrFormTemplate.formulario.items[i].name;
+                        var orden_Aux = _this.arrFormTemplate.formulario.items[i].orden;
+                        var id_Aux = _this.arrFormTemplate.formulario.items[i].id;
+                        var valores_Aux = _this.arrFormTemplate.formulario.items[i].valores.valor;
+                        var mostrar_Aux = _this.arrFormTemplate.formulario.items[i].mostrar;
+                        var actual_value = _this.arrFormTemplate.formulario.items[i].valor; /*This is the actualValue for this item*/
+                        /*is it a section title?*/
+                        if (_this.formElements[i] == 'titulo') {
+                            _this.drawTitle(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux);
+                        }
+                        /*is it a section sub-title?*/
+                        if (_this.formElements[i] == 'titulo2') {
+                            _this.drawTitle2(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux);
+                        }
+                        /*is it an input?*/
+                        if (_this.formElements[i] == 'input') {
+                            _this.drawInput(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
+                        }
+                        /*is it an numeric input?*/
+                        if (_this.formElements[i] == 'numerico') {
+                            _this.drawNumericInput(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
+                        }
+                        /*is it a select?*/
+                        if (_this.formElements[i] == 'select') {
+                            //console.log(response.data.formulario.items[i].valores);
+                            _this.drawSelect(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
+                        }
+                        /*is it an checkbox?*/
+                        if (_this.formElements[i] == 'check') {
+                            _this.drawCheckBox(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
+                        }
+                        /*is it a radioButton?*/
+                        if (_this.formElements[i] == 'radio') {
+                            _this.drawRadioButtons(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
+                        }
+                        /*is it a date input?*/
+                        if (_this.formElements[i] == 'date') {
+                            _this.drawDate(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
+                        }
+                        /*is it a textArea?*/
+                        if (_this.formElements[i] == 'textarea') {
+                            _this.drawTextArea(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
+                        }
+                        /*is it a file?*/
+                        if (_this.formElements[i] == 'file') {
+                            _this.drawFile(id_serial_Aux, tipo_Aux, deshabilitado_Aux, label_Aux, requerido_Aux, nombre_Aux, cond_habilitado_Aux, cond_mostrar_Aux, name_Aux, orden_Aux, id_Aux, valores_Aux, mostrar_Aux, actual_value);
+                        }
+                    }
+                    //drawing photo component
+                    _this.drawFile();
+                    //appending buttons to form
+                    _this.drawButtons();
+                }
+                $(".se-pre-con").fadeOut("slow");
+                /*Hasta acá, sacar de la llamada axios a la función general*/
+            }, 3000); /*Este delay está para comprobar que tenemos un problema de sincronismo*/
         },
         drawTitle: function (id_serial, tipo, deshabilitado, label, requerido, nombre, cond_habilitado, cond_mostrar, name, orden, id, valores, mostrar) {
             //console.log('item is a title='+tipo);
@@ -350,7 +388,8 @@ var vue1 = new vue({
             newSelect.setAttribute('id', name);
             newSelect.setAttribute('value', actual_value);
             if (requerido == 'true') {
-                newSelect.setAttribute('required', 'required');
+                //newSelect.setAttribute('required', 'required');
+                newSelect.required = true;
             }
             //console.log('valores a json: '+JSON.stringify(valores));
             var optionsCount = valores.length;
@@ -388,7 +427,8 @@ var vue1 = new vue({
         drawInput: function (id_serial, tipo, deshabilitado, label, requerido, nombre, cond_habilitado, cond_mostrar, name, orden, id, valores, mostrar, actual_value) {
             var newInput = document.createElement('input');
             if (requerido == 'true') {
-                newInput.setAttribute('required', 'required');
+                //newInput.setAttribute('required','true');
+                newInput.required = true;
             }
             newInput.setAttribute('id', name);
             newInput.setAttribute('name', name);
@@ -414,7 +454,8 @@ var vue1 = new vue({
         drawNumericInput: function (id_serial, tipo, deshabilitado, label, requerido, nombre, cond_habilitado, cond_mostrar, name, orden, id, valores, mostrar, actual_value) {
             var newNInput = document.createElement('input');
             if (requerido == 'true') {
-                newNInput.setAttribute('required', 'required');
+                //newNInput.setAttribute('required', 'required');
+                newNInput.required = true;
             }
             if (actual_value != "" && actual_value != null) {
                 newNInput.value = actual_value;
@@ -443,7 +484,8 @@ var vue1 = new vue({
             newDivAux.setAttribute('id', id_serial + '-container');
             var newCheckBox = document.createElement('input');
             if (requerido == 'true') {
-                newCheckBox.setAttribute('required', 'required');
+                //newCheckBox.setAttribute('required', 'required');
+                newCheckBox.required = true;
             }
             newCheckBox.setAttribute('id', name);
             newCheckBox.setAttribute('type', 'checkbox');
@@ -485,7 +527,8 @@ var vue1 = new vue({
                 newTextArea.setAttribute('placeholder', 'Ingrese ' + label);
             }
             if (requerido == 'true') {
-                newTextArea.setAttribute('required', 'required');
+                //newTextArea.setAttribute('required', 'required');
+                newTextArea.required = true;
             }
             newTextArea.setAttribute('class', 'form-control');
             newTextArea.setAttribute('id', name);
@@ -589,7 +632,8 @@ var vue1 = new vue({
             var newDivInputGroup = document.createElement('div');
             var newInput = document.createElement('input');
             if (requerido == 'true') {
-                newInput.setAttribute('required', 'required');
+                //newInput.setAttribute('required', 'required');
+                newInput.required = true;
             }
             newDivInputGroup.innerHTML = '<span class="input-group-text">' + label + '</span>';
             newDivMain.setAttribute('class', 'form-gorup');
@@ -654,7 +698,11 @@ $(document).on('click', '#send_form', function () {
     console.log("neighborhood: " + vue1.$data.neighborhood);
     console.log("taza: " + vue1.$data.taza);
     console.log("formID: " + vue1.$data.formID);
+    console.log("audit_lat: " + vue1.$data.audit_lat);
+    console.log("audit_lng: " + vue1.$data.audit_lng);
     console.log("================================");
+    if (vue1.$data.formID == "")
+        vue1.$data.formID = "0";
     if ($("#picture_input").val() != "" || $("#treePic").attr("src") != "/resource/image/main-icon.png") {
         if (vue1.$data.taza === "Taza con árbol") {
             var json_array_put = [];
@@ -666,14 +714,157 @@ $(document).on('click', '#send_form', function () {
                 });
             }
             if (Connectivity.checkInternetSpeed() !== "offline") {
-                var data = {
-                    "_put_formulario_batch_req": {
-                        "_put_formulario": json_array_put
+                // 3 ALmaceno los datos del árbol y la foto
+                var calle = "";
+                if (vue1.$data.selected_street === "Otra")
+                    calle = vue1.$data.calleOtra;
+                else
+                    calle = vue1.$data.selected_street;
+                var foto_arbol = "";
+                if (!$("#treePic").prop("src").includes("/resource/image/main-icon.png"))
+                    foto_arbol = $("#treePic").prop("src");
+                else
+                    foto_arbol = "";
+                var offline_form_data = {
+                    "_post_arbol_set": {
+                        "calle": calle,
+                        "altura": vue1.$data.number,
+                        "manz_id": vue1.$data.square_id,
+                        "nombre": $('#' + vue1.$data.idElements[0]).val(),
+                        //"info_id": vue1.$data.formID.toString(),
+                        "cens_id": vue1.$data.cens_id,
+                        "lat": vue1.$data.current_lat,
+                        "long": vue1.$data.current_lng,
+                        "lat_gps": vue1.$data.audit_lat.toString(),
+                        "long_gps": vue1.$data.audit_lng.toString(),
+                        "tipo": "",
+                        "imagen": Picture.getBase64AndResizeImage(foto_arbol, 400, 400),
+                        "taza": vue1.$data.taza,
+                        "barrio": vue1.$data.neighborhood,
+                        "_put_formulario_batch_req": {
+                            "form_id": "2",
+                            "_put_formulario": json_array_put
+                        }
                     }
                 };
-                Form.sendDynamicFormData(data, "PUT")
-                    .then(function (response) {
-                    if (response.status === 202) {
+                if (vue1.$data.formID === "0") {
+                    Form.sendDynamicFormDataOffline(offline_form_data, "POST")
+                        .then(function (response) {
+                        if (response.status >= 200 && response.status < 300) {
+                            $(".se-pre-con").fadeOut("slow");
+                            var message = $("#message");
+                            vue1.$data.alert_title = "¡Excelente!";
+                            vue1.$data.alert_message = "Los datos fueron guardados correctamente.";
+                            message.find(".modal-content").removeClass("modal-warning");
+                            message.find(".modal-content").addClass("modal-success");
+                            message.modal("show");
+                            message.on('hidden.bs.modal', function () {
+                                window.location.replace("home.html");
+                            });
+                            /*
+                            Form.sendOnlyTreePicture(data)
+                                .then(response => {
+
+                                    if (response.status === 200) {
+
+                                        $(".se-pre-con").fadeOut("slow");
+
+
+                                        let message = $("#message");
+
+                                        vue1.$data.alert_title = "¡Excelente!";
+                                        vue1.$data.alert_message = "Los datos fueron guardados correctamente.";
+
+
+                                        message.find(".modal-content").removeClass("modal-warning");
+                                        message.find(".modal-content").addClass("modal-success");
+                                        (<any>message).modal("show");
+
+
+                                        message.on('hidden.bs.modal', function () {
+
+                                            window.location.replace("home.html");
+                                        });
+
+                                    } else {
+
+                                        $(".se-pre-con").fadeOut("slow");
+
+
+                                        let message = $("#message");
+
+                                        vue1.$data.alert_title = "Error en el servidor";
+                                        vue1.$data.alert_message = "Se produjo un problema en el servidor y no se puedo guardar la foto del árbol.";
+
+
+                                        message.find(".modal-content").removeClass("modal-success");
+                                        message.find(".modal-content").addClass("modal-warning");
+                                        (<any>message).modal("show");
+                                    }
+
+                                })
+                                .catch(error => {
+
+                                    if (error.response.status === 401) {
+
+                                        //Session.invalidate();
+
+                                        //window.location.replace("/");
+                                    }
+
+                                    $(".se-pre-con").fadeOut("slow");
+
+                                    let message = $("#message");
+
+                                    vue1.$data.alert_title = "Error en el servidor";
+                                    vue1.$data.alert_message = "Se produjo un problema en el servidor y no se puedo guardar la foto del árbol.";
+
+
+                                    message.find(".modal-content").removeClass("modal-success");
+                                    message.find(".modal-content").addClass("modal-warning");
+                                    (<any>message).modal("show");
+
+                                    console.log(error);
+                                });
+                                */
+                        }
+                        else {
+                            $(".se-pre-con").fadeOut("slow");
+                            /*** Message modal ***/
+                            var message = $("#message");
+                            /*** Prepare and show message ***/
+                            vue1.$data.alert_title = "Error en el servidor";
+                            vue1.$data.alert_message = "Se produjo un problema en el servidor y la petición no se pudo enviar.";
+                            message.find(".modal-content").removeClass("modal-success");
+                            message.find(".modal-content").addClass("modal-warning");
+                            message.modal("show");
+                        }
+                    }).catch(function (error) {
+                        if (error.response.status === 401) {
+                            //Session.invalidate();
+                            //window.location.replace("/");
+                        }
+                        $(".se-pre-con").fadeOut("slow");
+                        /*** Message modal ***/
+                        var message = $("#message");
+                        /*** Prepare and show message ***/
+                        vue1.$data.alert_title = "Error en el servidor";
+                        vue1.$data.alert_message = "Se produjo un problema en el servidor y la petición no se pudo enviar.";
+                        message.find(".modal-content").removeClass("modal-success");
+                        message.find(".modal-content").addClass("modal-warning");
+                        message.modal("show");
+                        console.log(error);
+                    });
+                }
+                else {
+                    // PUT editar árbol online!
+                    var put_formulario = {
+                        "_put_formulario_batch_req": {
+                            "_put_formulario": json_array_put
+                        }
+                    };
+                    Form.sendDynamicFormData(put_formulario, "PUT")
+                        .then(function (response) {
                         var calle = "";
                         if (vue1.$data.selected_street === "Otra")
                             calle = vue1.$data.calleOtra;
@@ -684,8 +875,10 @@ $(document).on('click', '#send_form', function () {
                             foto_arbol = $("#treePic").prop("src");
                         else
                             foto_arbol = "";
-                        var data_1 = {
-                            "_post_arbol": {
+                        console.log("Arbol ID campo arbo_id (vue1.$data.tree_id) = " + vue1.$data.tree_id);
+                        var data = {
+                            "_put_arbol": {
+                                "arbo_id": vue1.$data.tree_id,
                                 "calle": calle,
                                 "altura": vue1.$data.number,
                                 "manz_id": vue1.$data.square_id,
@@ -694,13 +887,16 @@ $(document).on('click', '#send_form', function () {
                                 "cens_id": vue1.$data.cens_id,
                                 "lat": vue1.$data.current_lat,
                                 "long": vue1.$data.current_lng,
+                                "lat_gps": vue1.$data.audit_lat.toString(),
+                                "long_gps": vue1.$data.audit_lng.toString(),
                                 "barrio": vue1.$data.neighborhood,
                                 "tipo": "",
                                 "imagen": Picture.getBase64AndResizeImage(foto_arbol, 400, 400),
                                 "taza": vue1.$data.taza
                             }
                         };
-                        Form.sendOnlyTreePicture(data_1)
+                        console.log("_put_arbol = " + JSON.stringify(data));
+                        Form.sendOnlyTreePicture(data, "PUT")
                             .then(function (response) {
                             if (response.status === 200) {
                                 $(".se-pre-con").fadeOut("slow");
@@ -731,7 +927,7 @@ $(document).on('click', '#send_form', function () {
                         })
                             .catch(function (error) {
                             if (error.response.status === 401) {
-                                //Session.invalidate();
+                                ////Session.invalidate();
                                 //window.location.replace("/");
                             }
                             $(".se-pre-con").fadeOut("slow");
@@ -745,34 +941,8 @@ $(document).on('click', '#send_form', function () {
                             message.modal("show");
                             console.log(error);
                         });
-                    }
-                    else {
-                        $(".se-pre-con").fadeOut("slow");
-                        /*** Message modal ***/
-                        var message = $("#message");
-                        /*** Prepare and show message ***/
-                        vue1.$data.alert_title = "Error en el servidor";
-                        vue1.$data.alert_message = "Se produjo un problema en el servidor y la petición no se pudo enviar.";
-                        message.find(".modal-content").removeClass("modal-success");
-                        message.find(".modal-content").addClass("modal-warning");
-                        message.modal("show");
-                    }
-                }).catch(function (error) {
-                    if (error.response.status === 401) {
-                        //Session.invalidate();
-                        //window.location.replace("/");
-                    }
-                    $(".se-pre-con").fadeOut("slow");
-                    /*** Message modal ***/
-                    var message = $("#message");
-                    /*** Prepare and show message ***/
-                    vue1.$data.alert_title = "Error en el servidor";
-                    vue1.$data.alert_message = "Se produjo un problema en el servidor y la petición no se pudo enviar.";
-                    message.find(".modal-content").removeClass("modal-success");
-                    message.find(".modal-content").addClass("modal-warning");
-                    message.modal("show");
-                    console.log(error);
-                });
+                    });
+                }
             }
             else {
                 /* No hay conexión! */
@@ -806,6 +976,8 @@ $(document).on('click', '#send_form', function () {
                         "cens_id": vue1.$data.cens_id,
                         "lat": vue1.$data.current_lat,
                         "long": vue1.$data.current_lng,
+                        "lat_gps": vue1.$data.audit_lat.toString(),
+                        "long_gps": vue1.$data.audit_lng.toString(),
                         "tipo": "",
                         "imagen": Picture.getBase64AndResizeImage(foto_arbol, 400, 400),
                         "taza": vue1.$data.taza,
@@ -849,6 +1021,8 @@ $(document).on('click', '#send_form', function () {
                         "cens_id": vue1.$data.cens_id,
                         "lat": vue1.$data.current_lat,
                         "long": vue1.$data.current_lng,
+                        "lat_gps": vue1.$data.audit_lat.toString(),
+                        "long_gps": vue1.$data.audit_lng.toString(),
                         "barrio": vue1.$data.neighborhood,
                         "tipo": "",
                         "imagen": Picture.getBase64AndResizeImage(foto_arbol, 400, 400),
@@ -856,7 +1030,7 @@ $(document).on('click', '#send_form', function () {
                     }
                 };
                 console.log(data);
-                Form.sendOnlyTreePicture(data)
+                Form.sendOnlyTreePicture(data, "POST")
                     .then(function (response) {
                     if (response.status === 200) {
                         $(".se-pre-con").fadeOut("slow");
@@ -925,6 +1099,7 @@ $(document).on('click', '#send_form', function () {
                     foto_arbol = $("#treePic").prop("src");
                 else
                     foto_arbol = "";
+                //off
                 var offline_form_data = {
                     "_post_arbol_set": {
                         "calle": calle,
@@ -935,6 +1110,8 @@ $(document).on('click', '#send_form', function () {
                         "cens_id": vue1.$data.cens_id,
                         "lat": vue1.$data.current_lat,
                         "long": vue1.$data.current_lng,
+                        "lat_gps": vue1.$data.audit_lat.toString(),
+                        "long_gps": vue1.$data.audit_lng.toString(),
                         "tipo": "",
                         "imagen": Picture.getBase64AndResizeImage(foto_arbol, 400, 400),
                         "taza": vue1.$data.taza,

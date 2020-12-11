@@ -1,26 +1,14 @@
 let webpack = require("webpack");
-
 let path = require("path");
-
 let CleanWebpackPlugin = require("clean-webpack-plugin");
-
 let HtmlWebpackPlugin = require("html-webpack-plugin");
-
 let MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
 let autoprefixer = require('autoprefixer');
-
 let precss = require('precss');
-
 let OfflinePlugin = require('offline-plugin');
 let WebpackPwaManifest = require('webpack-pwa-manifest');
 let VueLoaderPlugin = require('vue-loader/lib/plugin');
-
-
-
 const CopyPlugin = require('copy-webpack-plugin');
-
-
 
 let pathsToClean = [
     "dist",
@@ -187,13 +175,10 @@ module.exports = [
             }),
 
             new VueLoaderPlugin(),
-
             new webpack.LoaderOptionsPlugin({
                 debug: true
             }),
-
             new CleanWebpackPlugin(pathsToClean, cleanOptions),
-
             new webpack.ProvidePlugin({
                 $: 'jquery',
                 jQuery: 'jquery',
@@ -296,9 +281,9 @@ module.exports = [
             }),
 
             new WebpackPwaManifest({
-                name: 'CENSARBO.SAN JUAN',
-                short_name: 'CENSARBO',
-                description: 'CENSARBO.SAN JUAN',
+                name: 'CENSARB.SAN JUAN',
+                short_name: 'CENSARB',
+                description: 'CENSARB.SAN JUAN',
                 background_color: '#fff',
                 crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
                 icons: [
@@ -341,7 +326,6 @@ module.exports = [
                     },
                 ],
                 externals: [
-
                     /* Resources images */
                     "./resource/image/loading.gif",
                     "./resource/image/main-icon.png",
@@ -353,7 +337,10 @@ module.exports = [
                     "./resource/image/marker-icon-2x.png",
                     "./resource/image/marker-icon.png",
                     "./resource/image/marker-shadow.png",
-
+                    "./resource/image/legend/calles_2020_3.png",
+                    "./resource/image/legend/capital_manzanas_0.png",
+                    "./resource/image/legend/espacios_verdes_2020_1.png",
+                    "./resource/image/legend/infraestructura_2.png",
 
                     /* Resources fonts */
                     "./resource/font/fa-regular-400.woff2",
@@ -377,6 +364,13 @@ module.exports = [
                     "./core.css",
                     /* JS Kernel Libs files */
                     "./core.js",
+
+                    /*NewCustomMaps*/
+                    "./resource/js/data/calles_2020_3.js",
+                    "./resource/js/data/capital_manzanas_0.js",
+                    "./resource/js/data/espacios_verdes_2020_1.js",
+                    "./resource/js/data/infraestructura_2.js",
+
 
                     /* Index Section */
                     "./IndexController.js",
@@ -445,6 +439,10 @@ module.exports = [
                             "./resource/image/marker-icon-2x.png",
                             "./resource/image/marker-icon.png",
                             "./resource/image/marker-shadow.png",
+                            "./resource/image/legend/calles_2020_3.png",
+                            "./resource/image/legend/capital_manzanas_0.png",
+                            "./resource/image/legend/espacios_verdes_2020_1.png",
+                            "./resource/image/legend/infraestructura_2.png",
 
 
                             /* Resources fonts */
@@ -469,6 +467,12 @@ module.exports = [
                             "./core.css",
                             /* JS Kernel Libs files */
                             "./core.js",
+
+                            /*NewCustomMaps*/
+                            "./resource/js/data/calles_2020_3.js",
+                            "./resource/js/data/capital_manzanas_0.js",
+                            "./resource/js/data/espacios_verdes_2020_1.js",
+                            "./resource/js/data/infraestructura_2.js",
 
                             /* Index Section */
                             "./IndexController.js",

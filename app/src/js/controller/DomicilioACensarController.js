@@ -6,8 +6,10 @@ import { Tree } from '../model/Tree';
 import MainHeader from '../../../component/main-header.vue';
 import VeeValidate, { Validator } from 'vee-validate';
 import * as es from 'vee-validate/dist/locale/es';
+import * as store from "store2";
 import vSelect from 'vue-select';
 import { User } from "../model/User";
+import { Connectivity } from "../model/Connectivity";
 Vue.component('v-select', vSelect);
 Validator.localize('es', es);
 Vue.use(VeeValidate, {
@@ -33,7 +35,7 @@ new vue({
         tazaList: [
             'Taza con árbol',
             'Taza vacía',
-            'Taza con tacón',
+            'Taza con tocón',
             'Sin Taza'
         ],
         arbol_id: '',
@@ -100,10 +102,32 @@ new vue({
             var area = this.searchAndGetParamFromURL("selected_area");
             var square = this.searchAndGetParamFromURL("selected_square");
             var treeID = this.searchAndGetParamFromURL("arbol_id");
-            User.getAllStreets().then(function (response) {
+            if (Connectivity.checkInternetSpeed() !== "offline") {
+                console.log("Lo toma online ? " + Connectivity.checkInternetSpeed());
+                User.getAllStreets().then(function (response) {
+                    if (area !== "not_found" && square !== "not_found") {
+                        _this.list_street = response.data.tree_list.data.area[area].square[square].street;
+                        _this.list_street.push("Otra");
+                        // Remove loading
+                        $(".se-pre-con").fadeOut("slow");
+                    }
+                    else {
+                        $(".se-pre-con").fadeOut("slow");
+                        $("h5:first-child").append("<p class=\"text-dark main-font pt-5\">No se encontraron elementos.</p>");
+                    }
+                }).catch(function (err) {
+                    console.log('error getting street list');
+                    //Session.invalidate();
+                    //window.location.replace("/");
+                    $(".se-pre-con").fadeOut("slow");
+                });
+            }
+            else {
+                console.log("Lo toma offline ? " + Connectivity.checkInternetSpeed());
+                var response = store.get("get_tree_response");
                 if (area !== "not_found" && square !== "not_found") {
-                    _this.list_street = response.data.tree_list.data.area[area].square[square].street;
-                    _this.list_street.push("Otra");
+                    this.list_street = response.tree_list.data.area[area].square[square].street;
+                    this.list_street.push("Otra");
                     // Remove loading
                     $(".se-pre-con").fadeOut("slow");
                 }
@@ -111,12 +135,7 @@ new vue({
                     $(".se-pre-con").fadeOut("slow");
                     $("h5:first-child").append("<p class=\"text-dark main-font pt-5\">No se encontraron elementos.</p>");
                 }
-            }).catch(function (err) {
-                console.log('error getting street list');
-                //Session.invalidate();
-                //window.location.replace("/");
-                $(".se-pre-con").fadeOut("slow");
-            });
+            }
         },
         goBack: function () {
             if (this.searchAndGetParamFromURL("arbol_id") != "" || this.searchAndGetParamFromURL("arbol_id") != null) {

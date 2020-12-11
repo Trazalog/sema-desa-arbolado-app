@@ -62,6 +62,29 @@ var Form = /** @class */ (function () {
             });
         });
     };
+    /*** Get a completed form for show its data on screen to be modified ***/
+    Form.getFormData = function (formID) {
+        return __awaiter(this, void 0, void 0, function () {
+            var url;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        url = Endpoint.PROTOCOL + "://" + Endpoint.HOSTNAME_BACKEND + ":" + Endpoint.PORT_BACKEND + Endpoint.URL_GET_FORM + formID;
+                        return [4 /*yield*/, axios({
+                                method: "GET",
+                                url: url,
+                                timeout: Endpoint.TIMEOUT,
+                                withCredentials: false,
+                                headers: {
+                                    'Authorization': store.get("token_type") + ' ' + store.get('access_token'),
+                                    'Content-Type': 'application/json'
+                                }
+                            })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     /*** Instance form ***/
     Form.createInstance = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -144,7 +167,7 @@ var Form = /** @class */ (function () {
             });
         });
     };
-    Form.sendOnlyTreePicture = function (data) {
+    Form.sendOnlyTreePicture = function (data, method) {
         return __awaiter(this, void 0, void 0, function () {
             var url;
             return __generator(this, function (_a) {
@@ -152,7 +175,7 @@ var Form = /** @class */ (function () {
                     case 0:
                         url = Endpoint.PROTOCOL + "://" + Endpoint.HOSTNAME_BACKEND + ":" + Endpoint.PORT_BACKEND + Endpoint.URL_POST_NEW_TREE;
                         return [4 /*yield*/, axios({
-                                method: "POST",
+                                method: method,
                                 url: url,
                                 timeout: Endpoint.TIMEOUT,
                                 withCredentials: false,
