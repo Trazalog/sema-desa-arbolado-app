@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#ver:658cd8894d6e4feb88427f50a352d78fafc04da5
+#ver:770098e9648ee23cd72d38bb599a73fe28b5aff1
 #plugin:5.0.7
 
 CACHE:
@@ -34,10 +34,15 @@ CACHE:
 ./resource/font/fa-solid-900.svg
 ./core.css
 ./core.js
-./resource/js/data/calles_2020_3.js
-./resource/js/data/capital_manzanas_0.js
-./resource/js/data/espacios_verdes_2020_1.js
-./resource/js/data/infraestructura_2.js
+./resource/js/leaflet.js
+./resource/js/leaflet.pattern.js
+./resource/js/rbush.min.js
+./resource/js/labelgun.min.js
+./resource/js/labels.js
+./resource/js/calles_2020_3.js
+./resource/js/capital_manzanas_0.js
+./resource/js/espacios_verdes_2020_1.js
+./resource/js/infraestructura_2.js
 ./IndexController.js
 ./
 ./HomeController.js
