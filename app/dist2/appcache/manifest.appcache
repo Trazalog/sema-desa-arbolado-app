@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#ver:4fc2788a33eba9973fc3614409e8b2e943017f4f
+#ver:5d4939550c63150aaa341300e0b0c3a2b84b7d15
 #plugin:5.0.7
 
 CACHE:
@@ -39,6 +39,11 @@ CACHE:
 ./resource/js/rbush.min.js
 ./resource/js/labelgun.min.js
 ./resource/js/labels.js
+./resource/js/index.min.js
+./resource/js/bundle.js
+./resource/js/ControlSaveTiles.js
+./resource/js/TileLayerOffline.js
+./resource/js/TileManager.js
 ./resource/js/calles_2020_3.js
 ./resource/js/capital_manzanas_0.js
 ./resource/js/espacios_verdes_2020_1.js
