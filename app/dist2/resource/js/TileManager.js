@@ -8,8 +8,8 @@
  *
  */
 
-import L from 'leaflet';
-import { openDB, deleteDB } from 'idb';
+import L from './leaflet';
+import { openDB, deleteDB } from './idb';
 
 const tileStoreName = 'tileStore';
 const urlTemplateIndex = 'urlTemplate';

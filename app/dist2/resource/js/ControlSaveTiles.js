@@ -1,4 +1,4 @@
-import L from 'leaflet';
+import L from './leaflet';
 import {
   truncate, getStorageLength, downloadTile, saveTile,
 } from './TileManager';

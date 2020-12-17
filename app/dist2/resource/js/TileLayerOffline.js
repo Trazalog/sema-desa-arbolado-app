@@ -1,4 +1,4 @@
-import L from 'leaflet';
+import L from './leaflet';
 import { getTileUrls, getTileUrl, getTile } from './TileManager';
 
 /**
