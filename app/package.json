@@ -24,7 +24,7 @@
     "@types/webpack-env": "^1.13.9",
     "ajv": "^6.10.0",
     "autoprefixer": "^9.6.0",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "axios-cache-adapter": "^2.3.3",
     "axios-extensions": "^3.0.6",
     "axios-offline-adapter": "0.0.2",
