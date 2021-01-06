@@ -51255,8 +51255,18 @@
                                 }
                             }
                         };
-                        l.get("offline_form_data"),
-                        l.set("offline_form_data", u),
+			if (l.has("offcounter")){
+			    var offcounter=l.get("offcounter")+1;
+			    l.set("offcounter",offcounter);
+			}
+			else
+			{
+			    l.add("offcounter",0)
+			    var offcounter=0;
+			}
+                        //l.get("offline_form_data"),
+                        //l.set("offline_form_data", u),
+                        l.add("offline_form_data"+offcounter, u),
                         alert("Sus datos fueron guardados localmente al no tener servicio de internet."),
                         window.location.replace("home.html")
                     }
